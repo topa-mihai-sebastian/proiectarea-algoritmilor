@@ -1,59 +1,54 @@
 #include <iostream>
-#include <vector>
 #include <fstream>
+#include <vector>
 using namespace std;
 
 int main()
 {
 	ifstream fin("stocks.in");
 	ofstream fout("stocks.out");
+	int profit = 0;
 	int N, B, L;
 	fin >> N >> B >> L;
-	int profit = 0;
-	// luam pe coloane
-	// prima coloana =1 pret initial samd.
-	vector<int> current_price(N + 1), min_price(N + 1), max_price(N + 1);
+	vector<int> buy_price(N + 1), min_sell_price(N + 1), max_sell_price(N + 1);
 	for (int i = 1; i <= N; i++)
 	{
-		fin >> current_price[i] >> min_price[i] >> max_price[i];
+		fin >> buy_price[i] >> min_sell_price[i] >> max_sell_price[i];
 	}
-	// dp[i][j] buget cheltui i si pierderi maxime j => profit maxim
 	vector<vector<int>> dp(B + 1, vector<int>(L + 1, 0));
 
-	// pt fiecare actiune
 	for (int i = 1; i <= N; i++)
 	{
-		// pornim de la intregul buget initial
-		for (int buget = B; buget >= 0; buget--)
+		for (int used = B; used >= 0; used--)
 		{
 			for (int loss = 0; loss <= L; loss++)
 			{
-				int current_cost = current_price[i];
-				if (buget + current_cost <= B)
+				// daca imi permit sa cumpar
+				if (used + buy_price[i] <= B)
 				{
-					int new_used = buget + current_cost;
-					// pierderea deja acumulata plus noua pierdere
-					int new_loss = loss + (current_cost - min_price[i]);
+					int new_used = used + buy_price[i];
+					int new_loss = loss + (buy_price[i] - min_sell_price[i]);
+
 					if (new_loss <= L)
 					{
-						int current_stock = dp[buget][loss] + max_price[i];
-						dp[new_used][new_loss] = max(dp[new_used][new_loss], current_stock);
+						int aux = dp[used][loss] + max_sell_price[i];
+						// caz de baza
+						dp[new_used][new_loss] = max(dp[new_used][new_loss], aux);
 					}
 				}
 			}
 		}
 	}
-
-	// aflam maximul
-	for (int buget = 0; buget <= B; buget++)
+	for (int used = 0; used <= B; used++)
 	{
 		for (int loss = 0; loss <= L; loss++)
 		{
-			int partial_res = dp[buget][loss] - buget;
-			profit = max(profit, partial_res);
+			int aux = dp[used][loss] - used;
+			profit = max(profit, aux);
 		}
 	}
 	fout << profit;
 	fin.close();
 	fout.close();
+	return 0;
 }
