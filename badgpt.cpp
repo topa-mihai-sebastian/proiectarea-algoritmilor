@@ -20,23 +20,27 @@ long long int fibo1(long long int n)
 	return b;
 }
 
-pair<long long, long long> fiboPair(long long n)
+pair<long long, long long> fast_fibo(long long n)
 {
 	if (n == 0)
+	{
 		return {0, 1};
-	auto p = fiboPair(n >> 1);
-	long long a = p.first, b = p.second;
-	long long c = (a * ((2 * b % MOD + MOD - a) % MOD)) % MOD;
+	}
+	auto fibo = fast_fibo(n / 2);
+	long long a = fibo.first, b = fibo.second;
+	long long c = (a * ((2 * b) % MOD - a + MOD) % MOD) % MOD;
 	long long d = ((a * a) % MOD + (b * b) % MOD) % MOD;
-	if (n & 1)
+
+	if (n % 2 == 1)
+	{
 		return {d, (c + d) % MOD};
-	else
-		return {c, d};
+	}
+	return {c, d};
 }
 
 long long fibo(long long n)
 {
-	return fiboPair(n).second;
+	return fast_fibo(n).second;
 }
 
 int main()
@@ -46,30 +50,28 @@ int main()
 	long long result = 1;
 
 	string s;
-	getline(fin, s); // citim întreaga linie
+	getline(fin, s);
 
 	for (size_t i = 0; i < s.size();)
 	{
 		char c = s[i];
-		// procesăm doar caracterele m,n,w,u
 		if (c == 'm' || c == 'n' || c == 'w' || c == 'u')
 		{
-			i++; // trecem la cifrele de după caracter
+			i++;
 			string numStr = "";
-			// citim toate cifrele imediat consecutive
+
 			while (i < s.size() && isdigit(s[i]))
 			{
 				numStr.push_back(s[i]);
 				i++;
 			}
-			// reverse(numStr.begin(), numStr.end());
-			//  convertim șirul de cifre în număr
+			// folosesc stoll (string => long long)
 			long long count = stoll(numStr);
 			result = (result * fibo(count)) % MOD;
 		}
 		else
 		{
-			i++; // dacă caracterul nu e unul din cele care ne interesează, continuăm
+			i++; // daca nu este n,m,w,u
 		}
 	}
 	fout << result;
