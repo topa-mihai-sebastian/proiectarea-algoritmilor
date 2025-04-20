@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <climits>
 using namespace std;
 
 long long N, K;
@@ -9,49 +8,43 @@ vector<long long> weights;
 
 bool isPossible(long long maxCost)
 {
-	long long ferriesUsed = 1, currentSum = 0;
-
-	for (long long i = 0; i < N; i++)
+	long long farriesUsed = 1, currentSum = 0;
+	for (auto weight : weights)
 	{
-		if (weights[i] > maxCost)
+		if (weight > maxCost)
 		{
 			return false;
 		}
-
-		if (currentSum + weights[i] > maxCost)
+		if (weight + currentSum > maxCost)
 		{
-			ferriesUsed++;
-			currentSum = weights[i];
-			if (ferriesUsed > K)
+			farriesUsed++;
+			currentSum = weight;
+			if (farriesUsed > K)
 			{
 				return false;
 			}
 		}
 		else
 		{
-			currentSum += weights[i];
+			currentSum += weight;
 		}
 	}
-
 	return true;
 }
 
 long long findMinCost()
 {
-	long long left = 0, right = 0, result = INT_MAX;
-
-	for (long long weight : weights)
+	long long left = 0, right = 0, mid, result = 0;
+	for (auto weight : weights)
 	{
 		right += weight;
 	}
-
 	while (left <= right)
 	{
-		long long mid = left + (right - left) / 2;
-
+		mid = left + (right - left) / 2;
 		if (isPossible(mid))
 		{
-			result = mid; // incercam un cost mai mic
+			result = mid;
 			right = mid - 1;
 		}
 		else
@@ -59,7 +52,6 @@ long long findMinCost()
 			left = mid + 1;
 		}
 	}
-
 	return result;
 }
 

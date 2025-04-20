@@ -29,16 +29,19 @@ int main()
 					int new_used = used + buy_price[i];
 					int new_loss = loss + (buy_price[i] - min_sell_price[i]);
 
+					// daca nu depasesc pierderea maxima
 					if (new_loss <= L)
 					{
+						// daca cumpar
 						int aux = dp[used][loss] + max_sell_price[i];
-						// caz de baza
+
 						dp[new_used][new_loss] = max(dp[new_used][new_loss], aux);
 					}
 				}
 			}
 		}
 	}
+
 	for (int used = 0; used <= B; used++)
 	{
 		for (int loss = 0; loss <= L; loss++)

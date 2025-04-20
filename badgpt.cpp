@@ -6,7 +6,7 @@ using namespace std;
 
 const long long MOD = 1000000007;
 
-long long int fibo1(long long int n)
+long long fibo1(long long n)
 {
 	long long int a = 0, b = 1;
 	long long aux;
