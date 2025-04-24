@@ -19,7 +19,7 @@ long long fibo1(long long n)
 	}
 	return b;
 }
-
+// log n
 pair<long long, long long> fast_fibo(long long n)
 {
 	if (n == 0)
@@ -51,7 +51,7 @@ int main()
 
 	string s;
 	getline(fin, s);
-
+	// complexitate : s.size() * log(count)
 	for (size_t i = 0; i < s.size();)
 	{
 		char c = s[i];

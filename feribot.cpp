@@ -39,6 +39,7 @@ long long findMinCost()
 	{
 		right += weight;
 	}
+	// N * log (suma tuturor greutatilor)
 	while (left <= right)
 	{
 		mid = left + (right - left) / 2;

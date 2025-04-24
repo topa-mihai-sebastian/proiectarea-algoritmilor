@@ -17,6 +17,7 @@ int main()
 	}
 	vector<vector<int>> dp(B + 1, vector<int>(L + 1, 0));
 
+	// complexitate N * (B+1) * (L + 1)
 	for (int i = 1; i <= N; i++)
 	{
 		for (int used = B; used >= 0; used--)
